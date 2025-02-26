@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/utils"
 
 export default function CartPage() {
-  const { cart, removeFromCart, getTotalPrice } = useCart()
+  const { cart, removeFromCart, getTotalPrice, incrementItem, decrementItem } = useCart()
 
   if (cart.length === 0) {
     return (
@@ -38,8 +38,18 @@ export default function CartPage() {
               <h3 className="font-medium">{item.title}</h3>
               <p className="text-sm text-muted-foreground">{item.category}</p>
               <div className="flex items-center justify-between mt-2">
-                <p className="font-semibold">{formatPrice(item.price)}</p>
-                <p className="text-sm">Quantity: {item.quantity}</p>
+                <p className="font-semibold">
+                  {formatPrice(
+                    typeof item.price === "string"
+                      ? (parseFloat(item.price.replace(/[^\d.-]/g, "")) || 0)
+                      : item.price
+                  )}
+                </p>
+                <div className="flex items-center space-x-2">
+                  <Button variant="outline" size="sm" onClick={() => decrementItem(item.id)}>-</Button>
+                  <span className="text-sm">Quantity: {item.quantity}</span>
+                  <Button variant="outline" size="sm" onClick={() => incrementItem(item.id)}>+</Button>
+                </div>
               </div>
             </div>
             <Button variant="ghost" size="icon" className="text-destructive" onClick={() => removeFromCart(item.id)}>
@@ -57,7 +67,7 @@ export default function CartPage() {
           <Button className="w-full mt-4">Proceed to Checkout</Button>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-4 flex justify-center">
           <Link href="/">
             <Button variant="outline">Continue Shopping</Button>
           </Link>

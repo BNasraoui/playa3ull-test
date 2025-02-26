@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import type { Product } from "@/types"
+import type { Product } from "../types"
 import { useCart } from "@/context/cart-context"
 import { Button } from "@/components/ui/button"
 import { formatPrice } from "@/lib/utils"
@@ -17,7 +17,28 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [added, setAdded] = useState(false)
 
   const handleAddToCart = () => {
-    setCart([...cart, { id: product.id, quantity: 1 }])
+    const existingItem = cart.find((item) => item.id === product.id)
+    if (existingItem) {
+      setCart(
+        cart.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        )
+      )
+    } else {
+      setCart([
+        ...cart,
+        {
+          id: product.id,
+          quantity: 1,
+          price: product.price,
+          title: product.title,
+          category: product.category,
+          image: product.image,
+        },
+      ])
+    }
     setAdded(true)
 
     setTimeout(() => {

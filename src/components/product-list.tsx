@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { getProducts } from "@/lib/api"
 import ProductCard from "@/components/product-card"
-import type { Product } from "@/types"
+import type { Product } from "../types"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 
