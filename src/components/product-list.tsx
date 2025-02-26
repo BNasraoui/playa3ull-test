@@ -20,7 +20,11 @@ export default function ProductList({ initialProducts }: ProductListProps) {
 
   const { data: products = initialProducts || [], isLoading, error } = useQuery<Product[]>({
     queryKey: ['products'],
-    queryFn: getProducts,
+    queryFn: async () => {
+      const res = await fetch('/api/products');
+      if (!res.ok) throw new Error('Failed to load products');
+      return res.json();
+    },
     initialData: initialProducts
   })
 
