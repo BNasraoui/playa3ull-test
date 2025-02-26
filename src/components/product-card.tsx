@@ -10,9 +10,14 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <Card className="overflow-hidden h-full flex flex-col">
+    <Card className="overflow-hidden h-full flex flex-col bg-playa-light text-playa-dark">
       <Link href={`/products/${product.id}`} className="relative block aspect-square">
-        <Image src={product.image || "/placeholder.svg"} alt={product.title} fill className="object-contain p-4" />
+        <Image
+          src={product.image || "/placeholder.svg"}
+          alt={product.title}
+          fill
+          className="object-contain p-4"
+        />
       </Link>
       <CardContent className="flex-grow p-4">
         <Link href={`/products/${product.id}`} className="hover:underline">
@@ -26,4 +31,3 @@ export default function ProductCard({ product }: ProductCardProps) {
     </Card>
   )
 }
-

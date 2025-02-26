@@ -26,7 +26,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 bg-playa-light text-playa-dark">
       <div className="grid md:grid-cols-2 gap-8">
         <div className="relative aspect-square">
           <Image src={product.image || "/placeholder.svg"} alt={product.title} fill className="object-contain" />

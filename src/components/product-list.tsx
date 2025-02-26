@@ -43,7 +43,7 @@ export default function ProductList() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
+      <div className="flex justify-center items-center min-h-[400px] bg-playa-light text-playa-dark">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     )
@@ -51,7 +51,7 @@ export default function ProductList() {
 
   if (error) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-12 bg-playa-light text-playa-dark">
         <p className="text-destructive">{error}</p>
         <Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>
           Try Again
@@ -61,7 +61,7 @@ export default function ProductList() {
   }
 
   return (
-    <div className="grid gap-8">
+    <div className="grid gap-8 bg-playa-light text-playa-dark p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {paginatedProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
