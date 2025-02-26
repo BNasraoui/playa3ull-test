@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { getProducts } from "@/lib/api"
 import ProductCard from "@/components/product-card"
 import type { Product } from "../types"
 import { Button } from "@/components/ui/button"
@@ -21,7 +20,7 @@ export default function ProductList({ initialProducts }: ProductListProps) {
   const { data: products = initialProducts || [], isLoading, error } = useQuery<Product[]>({
     queryKey: ['products'],
     queryFn: async () => {
-      const res = await fetch('/api/products');
+      const res = await fetch('https://fakestoreapi.com/products');
       if (!res.ok) throw new Error('Failed to load products');
       return res.json();
     },
