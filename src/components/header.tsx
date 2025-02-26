@@ -14,15 +14,18 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-playa-green bg-playa-dark/95 backdrop-blur">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center bg-playa-light text-playa-dark rounded-md px-4 py-2 tracking-tighter shadow-lg transform transition duration-300 hover:scale-105">
           <Image
             src="/hero-emblem.webp"
             alt="Hero Emblem"
             width={40}
             height={40}
           />
-          <span className="ml-2 text-xl font-bold text-playa-light">
-            Th3 Bull Sh0p
+          <span
+            className="ml-2 text-3xl font-extrabold font-chakra"
+            style={{ textShadow: "0 0 8px #aaff00" }}
+          >
+            PLAYA3ULL<span className="text-primary">SH0P</span>
           </span>
         </Link>
         <Link href="/cart">

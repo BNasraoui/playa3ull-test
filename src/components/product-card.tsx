@@ -10,13 +10,13 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <Card className="overflow-hidden h-full flex flex-col bg-playa-light text-playa-dark">
+    <Card className="overflow-hidden h-full flex flex-col bg-playa-light text-playa-dark flex-col transition-all duration-300 hover:glow-border rounded-lg">
       <Link href={`/products/${product.id}`} className="relative block aspect-square">
         <Image
           src={product.image || "/placeholder.svg"}
           alt={product.title}
           fill
-          className="object-contain p-4"
+          className="object-contain rounded-lg border border-playa-green p-4 transition-transform duration-300 hover:scale-105"
         />
       </Link>
       <CardContent className="flex-grow p-4">
