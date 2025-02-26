@@ -1,6 +1,8 @@
 import ProductList from "@/components/product-list"
+import { getProducts } from "@/lib/api"
 
-export default function Home() {
+export default async function Home() {
+  const products = await getProducts()
   return (
     <main className="container mx-auto px-4 py-8">
       <div className="text-center mb-12">
@@ -11,7 +13,7 @@ export default function Home() {
           Experience the future of gaming merchandise with our exclusive collection of products pulled from a random API...
         </p>
       </div>
-      <ProductList />
+      <ProductList initialProducts={products} />
     </main>
   )
 }
