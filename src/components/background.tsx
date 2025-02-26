@@ -23,6 +23,7 @@ export default function ThreeBackground() {
       alpha: true,
       antialias: true,
     })
+    renderer.setPixelRatio(window.devicePixelRatio)
     renderer.setSize(window.innerWidth, window.innerHeight)
     renderer.setClearColor(0x000000, 0)
     containerRef.current.appendChild(renderer.domElement)
@@ -95,99 +96,77 @@ export default function ThreeBackground() {
       return { triangleMeshes, velocities }
     }
 
-    // Create triangles
     const { triangleMeshes, velocities } = createFloatingTriangles(30)
     triangles.current = triangleMeshes
     triangleVelocities.current = velocities
 
-    // Handle mouse movement
+
     const handleMouseMove = (event: MouseEvent) => {
-      // Update mouse position for raycaster
       mousePosition.current.x = (event.clientX / window.innerWidth) * 2 - 1
       mousePosition.current.y = -(event.clientY / window.innerHeight) * 2 + 1
 
-      // Store current mouse position for velocity calculation
       const currentPosition = { x: event.clientX, y: event.clientY }
 
-      // Calculate mouse velocity if we have a previous position
       if (lastMousePosition.current) {
         const mouseVelocityX = (currentPosition.x - lastMousePosition.current.x) * 0.001
         const mouseVelocityY = (currentPosition.y - lastMousePosition.current.y) * 0.001
 
-        // Update raycaster
         raycaster.current.setFromCamera(mousePosition.current, camera)
 
-        // Check for intersections
         const intersects = raycaster.current.intersectObjects(triangles.current)
 
-        // Apply force to intersected triangles
         if (intersects.length > 0) {
           intersects.forEach((intersect) => {
             const index = triangles.current.indexOf(intersect.object as THREE.Mesh)
             if (index !== -1) {
-              // Apply force based on mouse velocity
               triangleVelocities.current[index].x += mouseVelocityX * 2
-              triangleVelocities.current[index].y -= mouseVelocityY * 2 // Invert Y for correct direction
+              triangleVelocities.current[index].y -= mouseVelocityY * 2
               triangleVelocities.current[index].z += (Math.random() - 0.5) * 0.05
 
-              // Highlight the hit triangle
-              ;(intersect.object as THREE.Mesh).material = new THREE.MeshBasicMaterial({
-                color: 0xaaff00,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.9,
-                side: THREE.DoubleSide,
-              })
+              const mesh = intersect.object as THREE.Mesh
+              const basicMaterial = mesh.material as THREE.MeshBasicMaterial
 
-              // Reset the material after a short delay
+              // Update material properties temporarily
+              basicMaterial.color.setHex(0xaaff00)
+              basicMaterial.opacity = 0.9
+
               setTimeout(() => {
-                ;(intersect.object as THREE.Mesh).material = new THREE.MeshBasicMaterial({
-                  color: 0x7fff00,
-                  wireframe: true,
-                  transparent: true,
-                  opacity: 0.6,
-                  side: THREE.DoubleSide,
-                })
+                // Revert to original state
+                basicMaterial.color.setHex(0x7fff00)
+                basicMaterial.opacity = 0.6
               }, 300)
             }
           })
         }
       }
 
-      // Store current position for next frame
       lastMousePosition.current = currentPosition
     }
 
-    window.addEventListener("mousemove", handleMouseMove)
+    window.addEventListener("mousemove", handleMouseMove, { passive: true })
 
-    // Handle window resize
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
       renderer.setSize(window.innerWidth, window.innerHeight)
     }
 
-    window.addEventListener("resize", handleResize)
+    window.addEventListener("resize", handleResize, { passive: true })
 
-    // Animation loop
+    let frameId: number
     const animate = () => {
-      requestAnimationFrame(animate)
-
-      // Update triangle positions based on velocities
+      frameId = requestAnimationFrame(animate)
       triangles.current.forEach((triangle, index) => {
         const velocity = triangleVelocities.current[index]
 
-        // Update position
         triangle.position.x += velocity.x
         triangle.position.y += velocity.y
         triangle.position.z += velocity.z
 
-        // Slow down velocity (damping)
         velocity.x *= 0.99
         velocity.y *= 0.99
         velocity.z *= 0.99
 
-        // Slow rotation
         triangle.rotation.x += 0.001
         triangle.rotation.y += 0.002
         triangle.rotation.z += 0.001
@@ -207,7 +186,6 @@ export default function ThreeBackground() {
           triangle.position.z = Math.sign(triangle.position.z) * 5
         }
       })
-
       renderer.render(scene, camera)
     }
 
@@ -217,6 +195,7 @@ export default function ThreeBackground() {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("resize", handleResize)
+      cancelAnimationFrame(frameId)
       if (containerRef.current && containerRef.current.contains(renderer.domElement)) {
         containerRef.current.removeChild(renderer.domElement)
       }
