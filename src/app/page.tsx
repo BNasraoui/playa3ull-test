@@ -1,8 +1,13 @@
 import ProductList from "@/components/product-list"
 import { getProducts } from "@/lib/api"
+import { unstable_noStore as noStore } from 'next/cache'
 
 export default async function Home() {
+  // Tell Next.js not to cache or pre-render this page
+  noStore()
+  
   const products = await getProducts()
+
   return (
     <main className="container mx-auto px-4 py-8">
       <div className="text-center mb-12">
