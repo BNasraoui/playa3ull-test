@@ -10,6 +10,7 @@ export async function GET() {
     const products = await res.json();
     return NextResponse.json(products);
   } catch (error) {
+    console.error("Error fetching products:", error);
     return NextResponse.error();
   }
 } 
