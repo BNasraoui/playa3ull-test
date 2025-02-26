@@ -3,13 +3,14 @@ import type { Product } from "../types"
 const API_URL = "https://fakestoreapi.com"
 
 export async function getProducts(): Promise<Product[]> {
-  const response = await fetch(`${API_URL}/products`)
+  const res = await fetch("/api/products")
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch products: ${response.status}`)
+  if (!res.ok) {
+    throw new Error("Failed to fetch products")
   }
 
-  return response.json()
+  const data = await res.json()
+  return data
 }
 
 export async function getProduct(id: number): Promise<Product> {
